@@ -11,7 +11,7 @@ This process builds up a list of browser sessions that should be blocked. The bl
 
 BotDefender has been designed to work on high traffic websites and as such the analysis of activity data is performed outside of the request/response flow.
 The impact of collecting traffic and blocking suspicious activity in Apache is an extremely optimized process that should be imperceptible (i.e. < 1 ms elapse).
-The analysis of the data will take seconds to process however as this is outside of the request/response flow it won't adversely impact website visitors.
+In comparison the analysis of the data will take seconds to process however as this is outside of the request/response flow it won't adversely impact website visitors.
 
 
 

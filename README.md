@@ -9,7 +9,7 @@ The HTTP requests collected by mod_collector are sent to Java servers that are r
 There is another Java process responsible for analysing the data in the database to identify patterns in the traffic that look like scraping activity.
 This analyzer process builds up a list of browser sessions that should be blocked. The block list is then sent back to Apache in real-time and used by mod_blocker to block further access by the suspicious session.
 
-BotDefender has been designed to work on high traffic websites and as such the analysis of activity data is performed outside of the request/response flow.
+Bot Defender has been designed to work on high traffic websites and as such the analysis of activity data is performed outside of the request/response flow.
 The impact of collecting traffic and blocking suspicious activity in Apache is an extremely optimized process that should be imperceptible (i.e. < 1 ms elapse).
 In comparison the analysis of the data will take seconds to process however as this is outside of the request/response flow it won't adversely impact website visitors.
 
@@ -18,9 +18,9 @@ In comparison the analysis of the data will take seconds to process however as t
     +---------+                   +-----------------+
     |         |                   | Apache          |
     |         |                   +-----------------+
-    |         |--http request---->| mod_collector   |--async---->[Java Collector]----->[MongoDB]------>[Java Analyzer]
-    |         |                   +-----------------+                                                         |
-    | Web     |<--block response--| mod_blocker     |<--------------------------------------------------------+
+    |         |--http request---->| mod_collector   |--async---->[Java Collector]-------+
+    |         |                   +-----------------+                                   |                      |
+    | Web     |<--block response--| mod_blocker     |<--[Java Analyzer]---[MongoDB]<----+
     | Browser |                   +-----------------+
     |         |                   | Normal Apache   |
     |         |<--normal response-| request handler |
@@ -29,7 +29,7 @@ In comparison the analysis of the data will take seconds to process however as t
 
 
 There are a number of scenarios that are used to block traffic, an example of the sort of blocking rules that exist are below. It's worth mentioning there
-are rules around these scenarios to fall back if BotDefender isn't confident that the traffic is a bot.
+are circuit breakers around these scenarios that break if BotDefender isn't totally confident that the traffic is a bot.
 
 ##High Level Block Scenarios
 * Block excessive activity for a given IP

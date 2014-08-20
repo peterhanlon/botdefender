@@ -2,7 +2,7 @@
 
 This project is under development.
 
-BotDefender is a system that works with Apache 2.4.x to identify web scraping and bad robot activity on a website and block that activity in real time.
+BotDefender is a system that works with Apache 2.4.x to identify web scraping activity on a website so that is can be blocked.
 The system is made up of two Apache modules, the first responsible for collecting all incoming HTTP requests and the second responsible for blocking suspicious activity in real time.
 The Apache instances fronting the website should have these two modules installed, these Apache instances will act as a traffic gateway.
 

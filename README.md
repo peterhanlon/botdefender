@@ -35,14 +35,14 @@ are circuit breakers around these scenarios that break if Bot Defender isn't tot
 
 ##High Level Block Scenarios
 * Block excessive activity for a given IP
-* Block excessive activity by the session MD5
+* Block excessive activity by the Bot Defender session cookie
 * Block excessive activity by URL fragment i.e. postcode or some other identifier
-* Block excessive activity by IP with a high number of non standard HTTPD status codes
-* Block excessive activity by session with a high number of non standard HTTPD status codes
-* Block excessive activity by url fragment with a high number of non standard HTTPD status codes
+* Block excessive activity by IP with a high number of non standard HTTP status codes
+* Block excessive activity by session with a high number of non standard HTTP status codes
+* Block excessive activity by url fragment with a high number of non standard HTTP status codes
 * Block sessions that have high activity but the referrer is always empty
 * Block sessions that replay the same session cookie over and over
-* Block sessions that replay invalid MD5 cookies
+* Block sessions that replay invalid session cookies
 * Block sessions that constantly forget to send valid session cookies
 * Block known bad user agents
 

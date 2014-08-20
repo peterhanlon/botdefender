@@ -5,6 +5,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * To change this template use File | Settings | File Templates.
  */
 public class MessageWriterThread extends Thread {
+    private static Logger logger = Logger.getLogger(MessageWriterThread.class);
     private static int MAX_ELAPSE_TIME = 1000;
     private static int MAX_BATCH_SIZE=100;
     private BlockingQueue<String> queue;
@@ -40,18 +42,16 @@ public class MessageWriterThread extends Thread {
             long batchSize = 0;
 
             while (true) {
-                long startTime=System.currentTimeMillis();
-                String jsonData = queue.poll(1000, TimeUnit.SECONDS);
-                long elapseTime = System.currentTimeMillis() - startTime;
+                String jsonData = queue.poll(MAX_ELAPSE_TIME, TimeUnit.SECONDS);
 
                 // Add the jsonData to the insertBatch list
                 if (jsonData != null) {
-                    System.out.println(jsonData);
                     objectBatch.add((DBObject) JSON.parse(jsonData));
                 }
 
                 // Commit the insertBatch batch to MongoDB
-                if ((elapseTime >= MAX_ELAPSE_TIME) || (batchSize>MAX_BATCH_SIZE)) {
+                if ((jsonData == null && objectBatch.size()>0)
+                        || (batchSize>MAX_BATCH_SIZE)) {
                     hitsCollection.insert(objectBatch);
                     objectBatch.clear();
                     batchSize=0;

@@ -6,7 +6,7 @@ BotDefender is a system that works with Apache 2.4.x to identify web scraping an
 The system is made up of two Apache modules, the first responsible for collecting all incoming HTTP requests and the second responsible for blocking suspicious activity in real time.
 The Apache instances fronting the website should have these two modules installed, these Apache instances will act as a traffic gateway.
 
-The data collected by apache is sent to a single or group of Java servers that are responsible for reading requests as quickly as possible and inserting the
+The data collected by apache is sent to a group of Java servers that are responsible for reading requests as quickly as possible and inserting the
 captured traffic into mongoDB as efficiently as possible. There is another Java process that analyses the data in the database to identify patterns in the
 traffic that look suspicious. This process builds up a list of browser sessions that should be blocked. The block list is then sent back to Apache in real-time
 and used by mod_blocker to block further access by the suspicious session.

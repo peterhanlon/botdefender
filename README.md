@@ -31,7 +31,7 @@ In comparison the analysis of the data will take seconds to process however as t
 
 
 There are a number of scenarios that are used to block traffic, an example of the sort of blocking rules that exist are below. It's worth mentioning there
-are circuit breakers around these scenarios that break if BotDefender isn't totally confident that the traffic is a bot.
+are circuit breakers around these scenarios that break if Bot Defender isn't totally confident that the traffic is a bot.
 
 ##High Level Block Scenarios
 * Block excessive activity for a given IP

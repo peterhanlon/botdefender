@@ -57,4 +57,6 @@ cd to the root directory and run
 * mvn deploy
 
 This will build the apache modules along with the java modules. At the moment the mod_collector.so and mod_blocker.so modules need to be manually
-copied into the Apache installation. This is done by copying the files from src/main/c/*.so to
+copied into the Apache installation. This is done by copying the files from src/main/c/*.so to the ${apache_home}/modules directory.
+
+[More info to come]

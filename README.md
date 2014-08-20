@@ -2,16 +2,15 @@
 
 This project is under development.
 
-BotDefender is a system that works with Apache 2.4.x to identify web scraping activity on a website so that is can be blocked.
-The system is made up of two Apache modules, the first responsible for collecting all incoming HTTP requests and the second responsible for blocking scraping activity in real time.
-The Apache instances fronting the website should have these two modules installed, these Apache instances will act as a traffic gateway.
+Bot Defender is a system that works with Apache 2.4.x to identify web scraping activity on a website so that is can be blocked.
+The system is made up of two Apache modules, the first "mod_collector" is responsible for collecting all incoming HTTP requests and the second "mod_blocker" is responsible for blocking scraping activity in real time.
 
-The HTTP requests collected by Apache are sent to Java servers that are responsible for storing the requests in a mongoDB database as efficiently as possible.
-There is another Java process responsible for analysing the data in the database to identify patterns in the traffic that look suspicious.
+The HTTP requests collected by mod_collector are sent to Java servers that are responsible for storing the requests in a mongoDB database as efficiently as possible.
+There is another Java process responsible for analysing the data in the database to identify patterns in the traffic that look like scraping activity.
 This process builds up a list of browser sessions that should be blocked. The block list is then sent back to Apache in real-time and used by mod_blocker to block further access by the suspicious session.
 
 BotDefender has been designed to work on high traffic websites and as such the analysis of activity data is performed outside of the request/response flow.
-The impact of collecting traffic and blocking suspicious activity in Apache is an extremely optimized process that should take less than 1ms to perform.
+The impact of collecting traffic and blocking suspicious activity in Apache is an extremely optimized process that should be imperceptible (i.e. < 1 ms elapse).
 The analysis of the data will take seconds to process however as this is outside of the request/response flow it won't adversely impact website visitors.
 
 

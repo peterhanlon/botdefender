@@ -1,6 +1,6 @@
 target/*
 .idea/*
-botdefender.iml
+/botdefender.iml
 src/main/c/*.o
 src/main/c/*.bak
 src/main/c/*.so

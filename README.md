@@ -1,9 +1,39 @@
 #BotDefender
-BotDefender is a system that works with Apache to identify bad robots and block the activity in real time.
-The system is made up of two Apache modules responsible for collecting traffic information in real time and blocking robots.
-The analysis of the traffic data is performed within a java based server that is responsible for identifying pattens in activity and informing Apache about what should be blocked.
 
-High Level Block Scenarios
+This project is under development.
+
+BotDefender is a system that works with Apache 2.4.x to identify web scraping and bad robot activity on a website and block that activity in real time.
+The system is made up of two Apache modules, the first responsible for collecting all incoming HTTP requests and the second responsible for blocking suspicious activity in real time.
+The Apache instances fronting the website should have these two modules installed, these Apache instances will act as a traffic gateway.
+
+The data collected by apache is sent to a single or group of Java servers that are responsible for reading requests as quickly as possible and inserting the
+captured traffic into mongoDB as efficiently as possible. There is another Java process that analyses the data in the database to identify patterns in the
+traffic that look suspicious. This process builds up a list of browser sessions that should be blocked. The block list is then sent back to Apache in real-time
+and used by mod_blocker to block further access by the suspicious session.
+
+BotDefender has been designed to work on high traffic websites and as such the analysis of activity data is performed outside of the request/response flow.
+The impact of collecting traffic and blocking suspicious activity in Apache is an extremely optimized process that should take less than 1ms to perform.
+The analysis of the data will take seconds to process however as this is outside of the request/response flow it won't adversely impact website visitors.
+
+
+
+    +---------+                   +-----------------+
+    |         |                   | Apache          |
+    |         |                   +-----------------+
+    |         |--http request---->| mod_collector   |--async---->[Java Collector]----->[MongoDB]------>[Java Analyzer]
+    |         |                   +-----------------+                                                         |
+    | Web     |<--block response--| mod_blocker     |<--------------------------------------------------------+
+    | Browser |                   +-----------------+
+    |         |                   | Normal Apache   |
+    |         |<--normal response-| request handler |
+    +---------+                   +-----------------+
+
+
+
+There are a number of scenarios that are used to block traffic, an example of the sort of blocking rules that exist are below. It's worth mentioning there
+are rules around these scenarios to fall back if BotDefender isn't confident that the traffic is a bot.
+
+##High Level Block Scenarios
 * Block excessive activity for a given IP
 * Block excessive activity by the session MD5
 * Block excessive activity by URL fragment i.e. postcode or some other identifier
@@ -16,9 +46,17 @@ High Level Block Scenarios
 * Block sessions that constantly forget to send valid session cookies
 * Block known bad user agents
 
-It is possible to build bespoke blocking rules over and above the basic rule set.
+It is possible to build bespoke blocking rules over and above the basic rule set. These can be tailored to the specific website and will have access to the
+data in the mongoDB store in order to determine the context of a session when determining if the traffic looks mechanical.
 
-#Building BotDefender
-##Linux
-First download and install the apache web server on the machine your going to use to build BotDefender.
-In order to build 
+
+##Building BotDefender
+Linux / OSX
+First download and install the apache web server on the machine where you intend to build BotDefender.
+Check that apxs is installed and in the path and that apachectl is installed and in the path (these should have been installed when apache was installed).
+
+cd to the root directory and run
+* mvn deploy
+
+This will build the apache modules along with the java modules. At the moment the mod_collector.so and mod_blocker.so modules need to be manually
+copied into the Apache installation. This is done by copying the files from src/main/c/*.so to

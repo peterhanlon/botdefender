@@ -1,2 +1,11 @@
 target/*
 .idea/*
+botdefender.iml
+src/main/c/*.o
+src/main/c/*.bak
+src/main/c/*.so
+src/main/c/*.loT
+src/main/c/*.slo
+src/main/c/*.la
+src/main/c/.libs
+

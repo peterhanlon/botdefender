@@ -7,7 +7,7 @@ The system is made up of two Apache modules, the first "mod_collector" is respon
 
 The HTTP requests collected by mod_collector are sent to Java servers that are responsible for storing the requests in a mongoDB database as efficiently as possible.
 There is another Java process responsible for analysing the data in the database to identify patterns in the traffic that look like scraping activity.
-This process builds up a list of browser sessions that should be blocked. The block list is then sent back to Apache in real-time and used by mod_blocker to block further access by the suspicious session.
+This analyzer process builds up a list of browser sessions that should be blocked. The block list is then sent back to Apache in real-time and used by mod_blocker to block further access by the suspicious session.
 
 BotDefender has been designed to work on high traffic websites and as such the analysis of activity data is performed outside of the request/response flow.
 The impact of collecting traffic and blocking suspicious activity in Apache is an extremely optimized process that should be imperceptible (i.e. < 1 ms elapse).

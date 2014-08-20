@@ -19,7 +19,7 @@ In comparison the analysis of the data will take seconds to process however as t
     |         |                   | Apache          |
     |         |                   +-----------------+
     |         |--http request---->| mod_collector   |--async---->[Java Collector]-------+
-    |         |                   +-----------------+                                   |                      |
+    |         |                   +-----------------+                                   |
     | Web     |<--block response--| mod_blocker     |<--[Java Analyzer]---[MongoDB]<----+
     | Browser |                   +-----------------+
     |         |                   | Normal Apache   |

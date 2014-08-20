@@ -2,8 +2,8 @@
 
 This project is under development.
 
-Bot Defender is a system that works with Apache 2.4.x to identify web scraping activity on a website so that is can be blocked.
-The system is made up of two Apache modules, the first "mod_collector" is responsible for collecting all incoming HTTP requests and the second "mod_blocker" is responsible for blocking scraping activity in real time.
+Bot Defender is a system that works with Apache 2.4.x to identify web scraping activity on a website so that is can be blocked in real-time.
+The system is made up of two Apache modules, the first "mod_collector" is responsible for collecting all incoming HTTP requests and the second "mod_blocker" is responsible for blocking scraping activity.
 
 The HTTP requests collected by mod_collector are sent to Java servers that are responsible for storing the requests in a mongoDB database as efficiently as possible.
 There is another Java process responsible for analysing the data in the database to identify patterns in the traffic that look like scraping activity.

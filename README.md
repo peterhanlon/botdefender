@@ -8,7 +8,7 @@ The system is made up of two Apache modules and a series of Java processes.
 The first Apache module "mod_collector" is responsible for collecting all incoming HTTP requests and the second "mod_blocker" is responsible for blocking scraping activity.
 The HTTP requests collected by mod_collector are sent to Java servers that are responsible for storing the requests in a mongoDB database as efficiently as possible.
 There is another Java process responsible for analysing the data in the database to identify patterns in the traffic that look like scraping activity.
-This analyzer process builds up a list of browser sessions that should be blocked. The block list is then sent back to Apache in real-time and used by mod_blocker to block further access by the suspicious session.
+This analyzer process builds up a list of browser sessions that should be blocked. The block list is sent back to Apache in real-time and used by mod_blocker to block further access by the suspicious session.
 
 Bot Defender has been designed to work on high traffic websites and as such the analysis of activity data is performed outside of the request/response flow.
 The impact of collecting traffic and blocking suspicious activity in Apache is an extremely optimized process that should be imperceptible (i.e. < 1 ms elapse).
@@ -30,8 +30,8 @@ In comparison the analysis of the data will take seconds to process however as t
 
 
 
-There are a number of scenarios that are used to block traffic, an example of the sort of blocking rules that exist are below. It's worth mentioning there
-are circuit breakers around these scenarios that break if Bot Defender isn't totally confident that the traffic is a bot.
+There are a number of scenarios that are used to block traffic, an example of the sort of blocking rules that exist are below. There is additional logic
+around these scenarios that stops the rule being actioned if Bot Defender isn't totally confident that the traffic is a bot.
 
 ##High Level Block Scenarios
 * Block excessive activity for a given IP

@@ -1,36 +1,43 @@
 #include <stdio.h>
 #include "httpd.h"
 #include "http_config.h" 
-#include "http_core.h" 
-#include "http_log.h" 
-#include "http_main.h" 
-#include "http_protocol.h" 
-#include "http_request.h" 
-#include "util_script.h" 
-#include "http_connection.h" 
-#include "ap_config.h"
-#include "apr_general.h"
-#include "apr_pools.h"
-#include "apr_hash.h"
+#include "http_log.h"
+#include "http_protocol.h"
 #include "apr_strings.h"
-#include "apr_atomic.h"
-#include "apr_anylock.h"
-#include "apr_errno.h"
-#include <regex.h>
 
 #include "common.h"
 #include "mod_collector.h"
 
 #if APR_HAVE_SYS_TYPES_H
-#include <sys/types.h>
 #endif
 #if APR_HAVE_UNISTD_H
-#include <unistd.h>
 #endif
 
 
 /*
-     __  __           _ ____  _            _
+ The MIT License (MIT)
+
+ Copyright (c)2014 Peter Hanlon
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+      __  __           _ ____  _            _
     |  \/  |         | |  _ \| |          | |
     | \  / | ___   __| | |_) | | ___   ___| | __ ___ _ __
     | |\/| |/ _ \ / _` |  _ <| |/ _ \ / __| |/ // _ \ '__|
@@ -39,7 +46,6 @@
 
     Blocks incoming requests based on the requestors IP address,
     Session ID or the URL fragment
-    [Pete Hanlon]
 */
 
 #define BLOCK_ACTION_ARRAY_SIZE 1000
@@ -70,7 +76,7 @@ typedef struct {
 static GlobalContext context;
 
 
-static const char* setBlockCommandPath(cmd_parms* cmd, void* cfg, const char* val)
+static const char *setBlockCommandPath(cmd_parms* cmd, void* cfg, const char *val)
 {
     context.blockCommandPath = (char *)val;
     return NULL ;
@@ -78,7 +84,7 @@ static const char* setBlockCommandPath(cmd_parms* cmd, void* cfg, const char* va
 
 
 
-void clearSharedMemory() {
+static void clearSharedMemory() {
     BlockAction *base = (BlockAction *)apr_shm_baseaddr_get(context.shm);
     int x=0;
     for (x=0; x<BLOCK_ACTION_ARRAY_SIZE; x++) {
@@ -97,7 +103,7 @@ static apr_status_t shmCleanupWrapper(void *unused) {
 
 
 
-char* getPostData(request_rec *r)
+static char *getPostData(request_rec *r)
 {
     // Load the POST data into the postData string
     ap_setup_client_block(r, REQUEST_CHUNKED_DECHUNK);
@@ -115,7 +121,7 @@ char* getPostData(request_rec *r)
 
 
 
-void storeBlockActionsInSharedMemory(request_rec *r, char *postData)
+static void storeBlockActionsInSharedMemory(request_rec *r, char *postData)
 {
     // Clear the shared memory that stored the actions to block
     clearSharedMemory();
@@ -137,7 +143,7 @@ void storeBlockActionsInSharedMemory(request_rec *r, char *postData)
         char *blockAction = apr_strtok( apr_pstrdup(r->pool,blockCmd), "=", &lastToken);
         if (blockAction != NULL) {
 
-            char* blockValue =  apr_strtok( NULL, "=", &lastToken);
+            char *blockValue =  apr_strtok( NULL, "=", &lastToken);
             if (blockValue != NULL) {
                 // Place the action to block in shared memory
                 strcpy(base[blockCmdCount].blockAction, blockAction);
@@ -164,9 +170,9 @@ void storeBlockActionsInSharedMemory(request_rec *r, char *postData)
 
 
 
-void processBlockCommands(request_rec *r) {
+static void processBlockCommands(request_rec *r) {
     // Get the posted data as a string
-    char* blockActionPostData = getPostData(r);
+    char *blockActionPostData = getPostData(r);
 
     // POST data is in the format IP=127.0.0.1, SESSION=<sessionID> ..
     storeBlockActionsInSharedMemory(r, blockActionPostData);
@@ -177,7 +183,7 @@ void processBlockCommands(request_rec *r) {
 /*
  * Check to see if the activity should be blocked or not
  */
-int isBlockedActivity(request_rec *r)
+static int isBlockedActivity(request_rec *r)
 {
     BlockAction *base = (BlockAction *)apr_shm_baseaddr_get(context.shm);
     Cookie *sessionCookie = getCookie(r, SESSION_COOKIE);
@@ -216,7 +222,7 @@ int isBlockedActivity(request_rec *r)
 
 
 
-void getBlockList(request_rec *r) {
+static void getBlockList(request_rec *r) {
     BlockAction *base = (BlockAction *)apr_shm_baseaddr_get(context.shm);
 
     int indx=0;
@@ -235,7 +241,7 @@ void getBlockList(request_rec *r) {
  * Format of URL : http://localhost/<block command path>?op=set
  * Format of URL : http://localhost/<block command path>?op=list
  */
-BlockListCommand parseBlockListCommandURL(request_rec *r)
+static BlockListCommand parseBlockListCommandURL(request_rec *r)
 {
     if (strcmp(r->method,"PUT") == 0) {
         if (strncmp(context.blockCommandPath, r->uri, strlen(context.blockCommandPath)) == 0) {
@@ -404,7 +410,7 @@ static void registerHooks(apr_pool_t *p)
 
 
 
-static const command_rec moduleCommands[] = {
+static const command_rec module_commands[] = {
   AP_INIT_TAKE1("BlockCommandPath", setBlockCommandPath, NULL, RSRC_CONF, "Path used by mod_blocker to accept incoming commands"),
   { NULL }
 };
@@ -422,8 +428,8 @@ module AP_MODULE_DECLARE_DATA blocker_module =
   NULL, /* per-directory config creator */ 
   NULL, /* directory config merger */ 
   NULL, /* server config creator */ 
-  NULL, /* server config merger */ 
-  moduleCommands, /* command table */
+  NULL, /* server config merger */
+        module_commands, /* command table */
   registerHooks, /* other request processing hooks */ 
 }; 
 

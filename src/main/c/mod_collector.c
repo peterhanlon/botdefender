@@ -203,7 +203,7 @@ static char *build_JSON_message(request_rec *r) {
     ret = apr_pstrcat(r->pool, ret, "\"userAgent\":\"", safeJSONString(r, user_agent_ip), "\"" , NULL);
     ret = apr_pstrcat(r->pool, ret, "},", NULL);
     ret = apr_pstrcat(r->pool, ret, "\"protocol\":\"", safeJSONString(r, r->protocol), "\",", NULL);
-    ret = apr_pstrcat(r->pool, ret, "\"url\":\",", safeJSONString(r, r->unparsed_uri), "\",", NULL);
+    ret = apr_pstrcat(r->pool, ret, "\"url\":\"", safeJSONString(r, r->unparsed_uri), "\",", NULL);
     ret = apr_pstrcat(r->pool, ret, "\"method\":\"", safeJSONString(r, r->method), "\",", NULL);
 
     if (request_state->buffer_index > 0) {

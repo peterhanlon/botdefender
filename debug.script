@@ -1,0 +1,7 @@
+set breakpoint pending on
+
+#b debugstop
+
+
+run -X -d /usr/local/apache2
+

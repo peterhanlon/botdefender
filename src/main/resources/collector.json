@@ -1,8 +1,8 @@
 {
-    "listenerPort":9999,
+    "listenerPort":9090,
     "messageQueueSize":10000,
     "messageWriterMaxBatchSize":100,
     "writerDatabaseName":"botdefender",
     "writerCollectionName":"hits",
-    "writerMaxCollectionSizeBytes":10000000000
+    "writerMaxCollectionSizeBytes":1000000000
 }

@@ -81,9 +81,9 @@ Unpack the apache source, for example if you downloaded the gzipped 2.4.10 versi
 
 * tar -xzvf httpd-2.4.10.tar.gz
 * cd httpd-2.4.10
-* mv ~/apr-1.5.1 srclib/apr
-* mv ~/apr-util-1.5.3 srclib/apr-util
-* mv ~/pcre-8.35 srclib/pcre
+* mv ~/httpd/apr-1.5.1 srclib/apr
+* mv ~/httpd/apr-util-1.5.3 srclib/apr-util
+* mv ~/httpd/pcre-8.35 srclib/pcre
 * ./configure --prefix=/usr/local/apache2 --enable-mods-shared=all --enable-so --with-included-apr
 * make
 * sudo make install

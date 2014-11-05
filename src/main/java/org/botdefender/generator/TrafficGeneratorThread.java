@@ -34,7 +34,8 @@ public class TrafficGeneratorThread extends Thread {
     }
 
     public void run() {
-        for (int x=0;x<10000; x++) {
+     //   for (int x=0;x<1000000; x++)
+        while(true) {
             try {
                 URL url = new URL("http://localhost/");
                 BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));

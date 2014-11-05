@@ -46,6 +46,7 @@ public class MongoMessageWriter implements MessageWriter {
 
     private DBCollection connectHitsCollection() throws Exception {
         DB db = new MongoClient().getDB(config.getWriterDatabaseName());
+
         if (db.collectionExists(config.getWriterCollectionName())) {
             // Connect to the collection
             collection = db.getCollection(config.getWriterCollectionName());

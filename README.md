@@ -127,16 +127,14 @@ KEEP_BODY flag keeps data, should then be able to use ap_parse_form_data
         ap_register_input_filter(KEPT_BODY_FILTER, kept_body_filter,
                                  kept_body_filter_init, AP_FTYPE_RESOURCE);
 
- CONTEXT - holding request context
- ﻿    log_request_state *state = (log_request_state *)ap_get_module_config(r->request_config,
+CONTEXT - holding request context
+
+    log_request_state *state = (log_request_state *)ap_get_module_config(r->request_config,
                                                                           &log_config_module);
-     if (!state) {
-         state = apr_pcalloc(r->pool, sizeof(log_request_state));
-         ap_set_module_config(r->request_config, &log_config_module, state);
-     }
-     if (state->request
+    if (!state) {
+        state = apr_pcalloc(r->pool, sizeof(log_request_state));
+        ap_set_module_config(r->request_config, &log_config_module, state);
+    }
+    if (state->request
 
-
-
-     Need to implement the
-kept_body_filter
+Need to implement the `kept_body_filter`

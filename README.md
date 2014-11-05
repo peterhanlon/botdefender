@@ -106,12 +106,12 @@ copied into the Apache installation. This is done by copying the files from src/
 ##Configuring Apache
 Add the following to the conf/httpd.conf file
 
-LoadModule collector_module   modules/mod_collector.so
-LoadModule blocker_module     modules/mod_blocker.so
+* LoadModule collector_module   modules/mod_collector.so
+* LoadModule blocker_module     modules/mod_blocker.so
 
-BlockCommandPath        /_admin
-CollectorServerPort     9999
-CollectorServerHost     localhost
+* BlockCommandPath        /_admin
+* CollectorServerPort     9999
+* CollectorServerHost     localhost
 
 
 
